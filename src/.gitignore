@@ -1,0 +1,42 @@
+# ============================================================
+# KantinKu - Git Ignore Configuration
+# ============================================================
+
+# 1. Dependencies
+node_modules/
+**/node_modules/
+
+# 2. Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+
+# 3. Uploaded User Files (Ignore contents, keep folder structure)
+uploads/*
+**/uploads/*
+!**/uploads/.gitkeep
+!**/uploads/avatars/
+!**/uploads/avatars/.gitkeep
+!**/uploads/menus/
+!**/uploads/menus/.gitkeep
+!**/uploads/stalls/
+!**/uploads/stalls/.gitkeep
+!**/uploads/umkm/
+!**/uploads/umkm/.gitkeep
+
+# 4. Compressed & Archive Files
+*.rar
+*.zip
+*.7z
+*.tar.gz
+
+# 5. Logs & Debugger Output
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# 6. OS & IDE Specific Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KantinKu - Pesan Makanan Tanpa Antre</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ab3500","on-primary":"#ffffff","primary-container":"#ff6b35","on-primary-container":"#5f1900","secondary":"#24619d","on-secondary":"#ffffff","secondary-container":"#87bcfe","tertiary":"#006d3e","on-tertiary":"#ffffff","tertiary-container":"#00b067","error":"#ba1a1a","on-error":"#ffffff","error-container":"#ffdad6","background":"#f7f9fc","on-background":"#191c1e","surface":"#f7f9fc","on-surface":"#191c1e","surface-variant":"#e0e3e6","on-surface-variant":"#594139","outline":"#8d7168","outline-variant":"#e1bfb5","surface-dim":"#d8dadd","surface-container-lowest":"#ffffff","surface-container-low":"#f2f4f7","surface-container":"#eceef1","surface-container-high":"#e6e8eb","surface-container-highest":"#e0e3e6","inverse-surface":"#2d3133","inverse-on-surface":"#eff1f4","inverse-primary":"#ffb59d"},fontFamily:{sans:["Inter","sans-serif"]}}}}
+</script>
+<style>
+  .card-hover:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(171,53,0,.12)}
+  .chip-active{background:#ab3500!important;color:#fff!important}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .animate-fadeUp{animation:fadeUp .5s ease forwards}
+  .skeleton{background:linear-gradient(90deg,#e6e8eb 25%,#f2f4f7 50%,#e6e8eb 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</head>
+<body class="bg-surface-container-low min-h-screen font-sans pb-20">
+<!-- Top Nav -->
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high">
+  <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings:'FILL' 1">restaurant</span>
+      <span class="text-xl font-bold text-primary">KantinKu</span>
+    </div>
+    <!-- Search -->
+    <div class="hidden sm:flex flex-1 max-w-md mx-4">
+      <div class="relative w-full">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+        <input id="search-input" type="text" placeholder="Cari UMKM..."
+          class="w-full pl-10 pr-4 py-2 bg-surface-container rounded-full text-sm border-none focus:ring-2 focus:ring-primary transition"/>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <!-- Cart -->
+      <button onclick="showToast('Pilih resto terlebih dahulu untuk melihat keranjang', 'info')" class="relative p-2 flex items-center justify-center hover:bg-surface-container rounded-full transition" title="Keranjang">
+        <span class="material-symbols-outlined text-on-surface">shopping_cart</span>
+        <span id="cart-badge" class="hidden absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-on-primary text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+      </button>
+      <!-- User Menu -->
+      <div class="relative" id="user-menu-wrapper">
+        <button id="user-menu-btn" class="flex items-center gap-2 p-1.5 hover:bg-surface-container rounded-full transition">
+          <div class="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center overflow-hidden">
+            <img id="user-avatar" src="" alt="" class="w-full h-full object-cover hidden"/>
+            <span id="user-initial" class="text-sm font-bold text-primary"></span>
+          </div>
+        </button>
+        <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-surface rounded-xl shadow-xl border border-surface-container-high py-2 z-50">
+          <div class="px-4 py-2 border-b border-surface-container">
+            <p id="user-fullname" class="text-sm font-semibold text-on-surface"></p>
+            <p id="user-role" class="text-xs text-on-surface-variant"></p>
+          </div>
+          <a href="profile.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container transition">
+            <span class="material-symbols-outlined text-[20px]">person</span>Profil Saya
+          </a>
+          <a href="orders.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface hover:bg-surface-container transition">
+            <span class="material-symbols-outlined text-[20px]">receipt_long</span>Pesanan Saya
+          </a>
+          <a href="seller/dashboard.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-tertiary hover:bg-tertiary-container/20 transition">
+            <span class="material-symbols-outlined text-[20px]">storefront</span>Dashboard Penjual
+          </a>
+          <a href="admin/dashboard.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-secondary hover:bg-secondary-container/20 transition">
+            <span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>Admin Panel
+          </a>
+          <hr class="my-1 border-surface-container"/>
+          <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-error hover:bg-error-container/30 transition">
+            <span class="material-symbols-outlined text-[20px]">logout</span>Keluar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Mobile Search -->
+  <div class="sm:hidden px-4 pb-3">
+    <div class="relative">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+      <input id="search-input-mobile" type="text" placeholder="Cari UMKM..."
+        class="w-full pl-10 pr-4 py-2.5 bg-surface-container rounded-full text-sm border-none focus:ring-2 focus:ring-primary transition"/>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 pt-6">
+  <!-- Hero -->
+  <section class="mb-8">
+    <h2 class="text-2xl sm:text-3xl font-bold text-on-surface mb-1">Temukan Kantin & UMKM</h2>
+    <p class="text-sm text-on-surface-variant">Pilih lokasi kantin untuk mulai pesan makanan</p>
+  </section>
+
+  <!-- City Filters -->
+  <div class="mb-6 flex gap-2 overflow-x-auto pb-2 scrollbar-hide" id="city-filters">
+    <button onclick="filterByCity('')" class="chip-active whitespace-nowrap px-4 py-2 rounded-full text-sm font-medium bg-surface-container text-on-surface-variant border border-surface-container-highest hover:border-primary transition" data-city="">
+      Semua
+    </button>
+  </div>
+
+  <!-- UMKM Grid -->
+  <div id="umkm-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- Skeleton loaders -->
+    <div class="skeleton rounded-2xl h-72"></div>
+    <div class="skeleton rounded-2xl h-72"></div>
+    <div class="skeleton rounded-2xl h-72"></div>
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="hidden text-center py-16">
+    <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">search_off</span>
+    <p class="text-lg font-semibold text-on-surface mb-1">Tidak ditemukan</p>
+    <p class="text-sm text-on-surface-variant">Coba ubah kata kunci atau filter pencarian</p>
+  </div>
+</main>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-surface-container-high z-40 sm:hidden">
+  <div class="flex items-center justify-around h-16">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 text-primary">
+      <span class="material-symbols-outlined text-[24px]" style="font-variation-settings:'FILL' 1">home</span>
+      <span class="text-[10px] font-semibold">Beranda</span>
+    </a>
+    <a href="orders.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">receipt_long</span>
+      <span class="text-[10px] font-medium">Pesanan</span>
+    </a>
+    <a href="profile.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">person</span>
+      <span class="text-[10px] font-medium">Profil</span>
+    </a>
+  </div>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/home.js"></script>
+</body></html>
