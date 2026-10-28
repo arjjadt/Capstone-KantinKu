@@ -82,7 +82,7 @@ const updateStatus = async (req, res, next) => {
     // Emit socket event to buyer
     try {
       const io = socketConfig.getIo();
-      io.to(`order_\${splitId}`).emit('order:status_updated', {
+      io.to(`order_${splitId}`).emit('order:status_updated', {
         splitId, status, updatedAt: new Date()
       });
     } catch (err) {
@@ -122,7 +122,7 @@ const verifyCode = async (req, res, next) => {
     // Emit socket
     try {
       const io = socketConfig.getIo();
-      io.to(`order_\${splitId}`).emit('order:status_updated', {
+      io.to(`order_${splitId}`).emit('order:status_updated', {
         splitId, status: 'completed', updatedAt: new Date()
       });
     } catch (err) {

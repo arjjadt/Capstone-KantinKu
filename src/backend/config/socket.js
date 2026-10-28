@@ -1,5 +1,6 @@
 const socketIo = require('socket.io');
 const jwt = require('jsonwebtoken');
+const db = require('./database');
 
 let io;
 
@@ -37,9 +38,27 @@ module.exports = {
       }
 
       // Join room for specific order tracking (buyer tracking their order)
-      socket.on('join_order_room', (splitId) => {
-        socket.join(`order_${splitId}`);
-        console.log(`User ${socket.user.id} joined order room: order_${splitId}`);
+      // Validasi kepemilikan: buyer pemilik order atau seller pemilik stall terkait
+      socket.on('join_order_room', async (splitId) => {
+        try {
+          if (typeof splitId !== 'string' || !/^[0-9a-fA-F-]{36}$/.test(splitId)) {
+            return socket.emit('order_error', { message: 'Invalid split id' });
+          }
+          const [rows] = await db.query(
+            `SELECT os.id FROM ORDER_SPLITS os
+             JOIN ORDERS o ON os.order_id = o.id
+             WHERE os.id = ? AND (o.buyer_user_id = ? OR os.stall_id = ?)
+             LIMIT 1`,
+            [splitId, socket.user.id, socket.user.stallId || '00000000-0000-0000-0000-000000000000']
+          );
+          if (rows.length === 0) {
+            return socket.emit('order_error', { message: 'You do not own this order' });
+          }
+          socket.join(`order_${splitId}`);
+          console.log(`User ${socket.user.id} joined order room: order_${splitId}`);
+        } catch (err) {
+          console.error('join_order_room error:', err.message);
+        }
       });
 
       socket.on('disconnect', () => {

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profil - KantinKu</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ab3500","on-primary":"#ffffff","primary-container":"#ff6b35","on-primary-container":"#5f1900","secondary":"#24619d","on-secondary":"#ffffff","secondary-container":"#87bcfe","tertiary":"#006d3e","on-tertiary":"#ffffff","tertiary-container":"#00b067","error":"#ba1a1a","on-error":"#ffffff","error-container":"#ffdad6","background":"#f7f9fc","on-background":"#191c1e","surface":"#f7f9fc","on-surface":"#191c1e","surface-variant":"#e0e3e6","on-surface-variant":"#594139","outline":"#8d7168","outline-variant":"#e1bfb5","surface-dim":"#d8dadd","surface-container-lowest":"#ffffff","surface-container-low":"#f2f4f7","surface-container":"#eceef1","surface-container-high":"#e6e8eb","surface-container-highest":"#e0e3e6","inverse-surface":"#2d3133","inverse-on-surface":"#eff1f4","inverse-primary":"#ffb59d"},fontFamily:{sans:["Inter","sans-serif"]}}}}
+</script>
+</head>
+<body class="bg-surface-container-low min-h-screen font-sans pb-20">
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high">
+  <div class="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
+    <a href="index.html" class="p-2 -ml-2 hover:bg-surface-container rounded-full transition">
+      <span class="material-symbols-outlined text-on-surface">arrow_back</span>
+    </a>
+    <h1 class="text-base font-semibold text-on-surface">Profil Saya</h1>
+  </div>
+</header>
+
+<main class="max-w-2xl mx-auto px-4 py-6 space-y-5">
+  <!-- Avatar -->
+  <div class="bg-surface rounded-2xl border border-surface-container-high p-6 text-center">
+    <div class="relative inline-block">
+      <div class="w-24 h-24 rounded-full bg-primary-container/20 flex items-center justify-center overflow-hidden mx-auto border-4 border-surface">
+        <img id="profile-avatar" src="" class="w-full h-full object-cover hidden"/>
+        <span id="profile-initial" class="text-3xl font-bold text-primary"></span>
+      </div>
+      <label class="absolute bottom-0 right-0 w-8 h-8 bg-primary text-on-primary rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-on-primary-container transition">
+        <span class="material-symbols-outlined text-[16px]">camera_alt</span>
+        <input type="file" id="avatar-input" accept="image/*" class="hidden" onchange="previewAvatar(this)"/>
+      </label>
+    </div>
+    <p id="profile-name-display" class="mt-3 font-bold text-on-surface text-lg"></p>
+    <p id="profile-role-display" class="text-sm text-on-surface-variant"></p>
+  </div>
+
+  <!-- Profile Form -->
+  <div class="bg-surface rounded-2xl border border-surface-container-high p-6 space-y-4">
+    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">person</span>Informasi Akun</h2>
+    <div>
+      <label class="block text-xs font-medium text-on-surface-variant mb-1">Username</label>
+      <input id="p-username" type="text" disabled class="w-full px-3 py-2 bg-surface-container text-on-surface-variant rounded-lg text-sm border-none cursor-not-allowed"/>
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-on-surface-variant mb-1">Email</label>
+      <input id="p-email" type="email" disabled class="w-full px-3 py-2 bg-surface-container text-on-surface-variant rounded-lg text-sm border-none cursor-not-allowed"/>
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-on-surface mb-1">Nama Lengkap</label>
+      <input id="p-fullname" type="text" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-on-surface mb-1">Nomor Telepon</label>
+      <input id="p-phone" type="tel" placeholder="08xxxxxxxxxx" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+    </div>
+    <button onclick="handleUpdateProfile()" id="save-profile-btn" class="w-full bg-primary text-on-primary font-semibold py-2.5 rounded-xl hover:bg-on-primary-container transition flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-[18px]">save</span>Simpan Profil
+    </button>
+  </div>
+
+  <!-- Change Password -->
+  <div class="bg-surface rounded-2xl border border-surface-container-high overflow-hidden">
+    <button onclick="togglePasswordSection()" class="w-full px-6 py-4 flex items-center justify-between hover:bg-surface-container-low transition">
+      <span class="text-sm font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">lock</span>Ganti Password</span>
+      <span class="material-symbols-outlined text-on-surface-variant" id="pw-toggle-icon">expand_more</span>
+    </button>
+    <div id="password-section" class="hidden px-6 pb-5 space-y-3">
+      <input id="pw-current" type="password" placeholder="Password lama" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+      <input id="pw-new" type="password" placeholder="Password baru (min 6 karakter)" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+      <input id="pw-confirm" type="password" placeholder="Konfirmasi password baru" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+      <button onclick="handleChangePassword()" id="change-pw-btn" class="w-full bg-secondary text-on-secondary font-semibold py-2.5 rounded-xl hover:bg-on-secondary-container transition">Ubah Password</button>
+    </div>
+  </div>
+
+  <!-- Applications -->
+  <div class="bg-surface rounded-2xl border border-surface-container-high p-6 space-y-4">
+    <h2 class="text-sm font-bold text-on-surface flex items-center gap-2"><span class="material-symbols-outlined text-primary text-[20px]">description</span>Pengajuan Saya</h2>
+    <div id="my-applications" class="space-y-3"><p class="text-xs text-on-surface-variant">Memuat...</p></div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="space-y-3">
+    <a href="apply-umkm.html" class="block w-full bg-surface rounded-2xl border border-surface-container-high p-4 hover:border-primary/30 transition flex items-center gap-3">
+      <div class="w-10 h-10 bg-secondary/10 rounded-xl flex items-center justify-center"><span class="material-symbols-outlined text-secondary">add_business</span></div>
+      <div><p class="text-sm font-semibold text-on-surface">Daftar UMKM Baru</p><p class="text-xs text-on-surface-variant">Ajukan lokasi kantin/UMKM baru</p></div>
+    </a>
+    <a href="apply-stall.html" id="apply-stall-link" class="block w-full bg-surface rounded-2xl border border-surface-container-high p-4 hover:border-primary/30 transition flex items-center gap-3">
+      <div class="w-10 h-10 bg-tertiary/10 rounded-xl flex items-center justify-center"><span class="material-symbols-outlined text-tertiary">storefront</span></div>
+      <div><p class="text-sm font-semibold text-on-surface">Daftar Warung Baru</p><p class="text-xs text-on-surface-variant">Ajukan warung di lokasi UMKM yang aktif</p></div>
+    </a>
+  </div>
+
+  <!-- Logout -->
+  <button onclick="logout()" class="w-full bg-error/10 text-error font-semibold py-3 rounded-2xl hover:bg-error/20 transition flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined text-[20px]">logout</span>Keluar
+  </button>
+</main>
+
+<nav class="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-surface-container-high z-20 sm:hidden">
+  <div class="flex items-center justify-around h-16">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">home</span><span class="text-[10px] font-medium">Beranda</span></a>
+    <a href="orders.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="text-[10px] font-medium">Pesanan</span></a>
+    <a href="profile.html" class="flex flex-col items-center gap-0.5 text-primary"><span class="material-symbols-outlined text-[24px]" style="font-variation-settings:'FILL' 1">person</span><span class="text-[10px] font-semibold">Profil</span></a>
+  </div>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/profile.js"></script>
+</body></html>

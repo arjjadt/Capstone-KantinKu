@@ -42,7 +42,7 @@ const checkout = async (req, res, next) => {
 
       for (const item of stallItems) {
         const [menus] = await connection.query('SELECT name, price FROM MENU_ITEMS WHERE id = ?', [item.menu_item_id]);
-        if (menus.length === 0) throw new Error(`Menu item \${item.menu_item_id} not found`);
+        if (menus.length === 0) throw new Error(`Menu item ${item.menu_item_id} not found`);
         
         const menu = menus[0];
         const itemTotal = parseFloat(menu.price) * item.quantity;
@@ -93,7 +93,7 @@ const checkout = async (req, res, next) => {
            name: i[3], qty: i[5], notes: i[6]
         }));
 
-        io.to(`stall_\${stallId}`).emit('seller:new_order', {
+        io.to(`stall_${stallId}`).emit('seller:new_order', {
           splitId, queueNumber, diningOption, items: splitItems
         });
       }

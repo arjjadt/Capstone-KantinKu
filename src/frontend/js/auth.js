@@ -1,29 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Determine page type by checking for email input (register has it, login doesn't)
-  const isRegister = !!document.getElementById('email');
-
-  // Auto-fill username if redirected from registration
-  if (!isRegister) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const registeredUser = urlParams.get('registered') || urlParams.get('username');
-    if (registeredUser) {
-      const userInput = document.getElementById('username');
-      if (userInput) {
-        userInput.value = registeredUser;
-        const passInput = document.getElementById('password');
-        if (passInput) passInput.focus();
-      }
-      if (typeof showToast === 'function') {
-        showToast('Akun berhasil dibuat! Silakan masukkan password untuk login.', 'success');
-      }
+  // If already logged in, redirect
+  if (isLoggedIn()) {
+    const user = getUser();
+    if (user.role === 'seller') {
+      window.location.href = 'seller/dashboard.html';
+    } else if (user.role === 'admin') {
+      window.location.href = 'admin/dashboard.html';
+    } else {
+      window.location.href = 'index.html';
     }
+    return;
   }
 
   const form = document.querySelector('form');
   if (!form) return;
 
-  // Password visibility toggle (only target password toggle buttons inside field wrapper)
-  document.querySelectorAll('.relative button[type="button"]').forEach(btn => {
+  // Determine page type by checking for email input (register has it, login doesn't)
+  const isRegister = !!document.getElementById('email');
+
+  // Wire up register link on login page
+  const registerLink = document.querySelector('a[href="#"]');
+  if (registerLink && !isRegister) {
+    registerLink.href = 'register.html';
+  }
+
+  // Wire up login link on register page
+  const loginLink = document.querySelector('a[href="#"]');
+  if (loginLink && isRegister) {
+    loginLink.href = 'login.html';
+  }
+
+  // Password visibility toggle
+  document.querySelectorAll('button[type="button"]').forEach(btn => {
     btn.addEventListener('click', () => {
       const input = btn.parentElement.querySelector('input');
       if (input) {
@@ -67,26 +75,22 @@ async function handleRegister(form, submitBtn, originalBtnText) {
 
     // Validations
     if (!username || !fullName || !email || !password || !confirmPassword) {
-      if (typeof showToast === 'function') showToast('Semua field wajib harus diisi.', 'error');
-      else alert('Semua field wajib harus diisi.');
+      showToast('Semua field wajib harus diisi.', 'error');
       return;
     }
 
     if (username.includes(' ')) {
-      if (typeof showToast === 'function') showToast('Username tidak boleh mengandung spasi.', 'error');
-      else alert('Username tidak boleh mengandung spasi.');
+      showToast('Username tidak boleh mengandung spasi.', 'error');
       return;
     }
 
     if (password.length < 6) {
-      if (typeof showToast === 'function') showToast('Password minimal 6 karakter.', 'error');
-      else alert('Password minimal 6 karakter.');
+      showToast('Password minimal 6 karakter.', 'error');
       return;
     }
 
     if (password !== confirmPassword) {
-      if (typeof showToast === 'function') showToast('Password dan konfirmasi password tidak cocok!', 'error');
-      else alert('Password dan konfirmasi password tidak cocok!');
+      showToast('Password dan konfirmasi tidak cocok!', 'error');
       return;
     }
 
@@ -98,23 +102,12 @@ async function handleRegister(form, submitBtn, originalBtnText) {
       body: JSON.stringify(body)
     });
 
-    // Clear any previous session so the user can test their new account
-    localStorage.removeItem('kantinku_token');
-    localStorage.removeItem('kantinku_user');
-
-    if (typeof showToast === 'function') {
-      showToast('Registrasi berhasil! Silakan masuk dengan akun baru Anda...', 'success');
-    }
-
+    showToast('Registrasi berhasil! Silakan login.', 'success');
     setTimeout(() => {
-      window.location.href = `login.html?registered=${encodeURIComponent(username)}`;
-    }, 1200);
+      window.location.href = 'login.html';
+    }, 1500);
   } catch (error) {
-    if (typeof showToast === 'function') {
-      showToast(error.message || 'Registrasi gagal. Silakan coba lagi.', 'error');
-    } else {
-      alert(error.message || 'Registrasi gagal.');
-    }
+    showToast(error.message || 'Registrasi gagal.', 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalBtnText;
@@ -127,8 +120,7 @@ async function handleLogin(form, submitBtn, originalBtnText) {
     const password = document.getElementById('password')?.value;
 
     if (!username || !password) {
-      if (typeof showToast === 'function') showToast('Username dan password harus diisi.', 'error');
-      else alert('Username dan password harus diisi.');
+      showToast('Username dan password harus diisi.', 'error');
       return;
     }
 
@@ -139,7 +131,7 @@ async function handleLogin(form, submitBtn, originalBtnText) {
 
     // Save auth data
     saveAuth(data.data.token, data.data.user);
-    if (typeof showToast === 'function') showToast('Login berhasil!', 'success');
+    showToast('Login berhasil!', 'success');
 
     // Redirect based on role
     setTimeout(() => {
@@ -150,13 +142,9 @@ async function handleLogin(form, submitBtn, originalBtnText) {
       } else {
         window.location.href = 'index.html';
       }
-    }, 600);
+    }, 800);
   } catch (error) {
-    if (typeof showToast === 'function') {
-      showToast('Login gagal: ' + (error.message || 'Username atau password salah.'), 'error');
-    } else {
-      alert('Login gagal: ' + (error.message || 'Username atau password salah.'));
-    }
+    showToast('Login gagal: ' + (error.message || 'Username atau password salah.'), 'error');
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalBtnText;

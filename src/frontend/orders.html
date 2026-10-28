@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pesanan Saya - KantinKu</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ab3500","on-primary":"#ffffff","primary-container":"#ff6b35","on-primary-container":"#5f1900","secondary":"#24619d","on-secondary":"#ffffff","secondary-container":"#87bcfe","tertiary":"#006d3e","on-tertiary":"#ffffff","tertiary-container":"#00b067","error":"#ba1a1a","on-error":"#ffffff","error-container":"#ffdad6","background":"#f7f9fc","on-background":"#191c1e","surface":"#f7f9fc","on-surface":"#191c1e","surface-variant":"#e0e3e6","on-surface-variant":"#594139","outline":"#8d7168","outline-variant":"#e1bfb5","surface-dim":"#d8dadd","surface-container-lowest":"#ffffff","surface-container-low":"#f2f4f7","surface-container":"#eceef1","surface-container-high":"#e6e8eb","surface-container-highest":"#e0e3e6","inverse-surface":"#2d3133","inverse-on-surface":"#eff1f4","inverse-primary":"#ffb59d"},fontFamily:{sans:["Inter","sans-serif"]}}}}
+</script>
+<style>
+  .progress-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all .3s}
+  .progress-dot.active{background:#006d3e;color:#fff}
+  .progress-dot.inactive{background:#e0e3e6;color:#8d7168}
+  .progress-dot.cancelled{background:#ba1a1a;color:#fff}
+  .progress-line{height:3px;flex:1;transition:background .3s}
+  .progress-line.active{background:#006d3e}
+  .progress-line.inactive{background:#e0e3e6}
+  .code-digit{width:36px;height:44px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;background:#f2f4f7;border-radius:8px;border:2px solid #e0e3e6}
+</style>
+</head>
+<body class="bg-surface-container-low min-h-screen font-sans pb-20">
+<!-- Top Bar -->
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high">
+  <div class="max-w-3xl mx-auto px-4 h-14 flex items-center gap-3">
+    <a href="index.html" class="p-2 -ml-2 hover:bg-surface-container rounded-full transition">
+      <span class="material-symbols-outlined text-on-surface">arrow_back</span>
+    </a>
+    <h1 class="text-base font-semibold text-on-surface">Pesanan Saya</h1>
+  </div>
+</header>
+
+<!-- Tabs -->
+<div class="sticky top-14 z-30 bg-surface border-b border-surface-container-high">
+  <div class="max-w-3xl mx-auto px-4 flex">
+    <button onclick="switchOrderTab('active')" id="tab-active" class="flex-1 py-3 text-sm font-semibold text-center border-b-2 border-primary text-primary transition">Aktif</button>
+    <button onclick="switchOrderTab('history')" id="tab-history" class="flex-1 py-3 text-sm font-semibold text-center border-b-2 border-transparent text-on-surface-variant hover:text-on-surface transition">Riwayat</button>
+  </div>
+</div>
+
+<main class="max-w-3xl mx-auto px-4 py-4">
+  <div id="orders-container" class="space-y-4"></div>
+  <div id="orders-empty" class="hidden text-center py-16">
+    <span class="material-symbols-outlined text-5xl text-outline-variant mb-3">receipt_long</span>
+    <p class="text-sm text-on-surface-variant">Belum ada pesanan</p>
+  </div>
+</main>
+
+<!-- Rating Modal -->
+<div id="rating-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+    <div class="px-6 py-4 border-b border-surface-container flex items-center justify-between">
+      <h3 class="font-bold text-on-surface">Beri Rating</h3>
+      <button onclick="closeRatingModal()" class="p-1 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="px-6 py-5 space-y-4">
+      <input type="hidden" id="rating-stall-id"/>
+      <input type="hidden" id="rating-split-id"/>
+      
+      <div id="rating-items-container" class="space-y-6 max-h-[50vh] overflow-y-auto pr-2">
+        <!-- Items injected here by order.js -->
+      </div>
+
+      <div class="flex items-center gap-2 pt-2 border-t border-surface-container">
+        <input type="checkbox" id="rating-anonymous" class="rounded text-primary focus:ring-primary h-4 w-4 border-surface-container-highest"/>
+        <label for="rating-anonymous" class="text-sm font-medium text-on-surface">Sembunyikan nama (Anonim)</label>
+      </div>
+
+      <button onclick="submitRating()" id="rating-submit-btn"
+        class="w-full bg-primary text-on-primary font-semibold py-2.5 rounded-xl hover:bg-on-primary-container transition">
+        Kirim Rating
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-surface-container-high z-20 sm:hidden">
+  <div class="flex items-center justify-around h-16">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">home</span><span class="text-[10px] font-medium">Beranda</span>
+    </a>
+    <a href="orders.html" class="flex flex-col items-center gap-0.5 text-primary">
+      <span class="material-symbols-outlined text-[24px]" style="font-variation-settings:'FILL' 1">receipt_long</span><span class="text-[10px] font-semibold">Pesanan</span>
+    </a>
+    <a href="profile.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">person</span><span class="text-[10px] font-medium">Profil</span>
+    </a>
+  </div>
+</nav>
+
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/order.js"></script>
+</body></html>

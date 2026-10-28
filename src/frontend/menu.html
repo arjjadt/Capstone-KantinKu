@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu - KantinKu</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ab3500","on-primary":"#ffffff","primary-container":"#ff6b35","on-primary-container":"#5f1900","secondary":"#24619d","on-secondary":"#ffffff","secondary-container":"#87bcfe","tertiary":"#006d3e","on-tertiary":"#ffffff","tertiary-container":"#00b067","error":"#ba1a1a","on-error":"#ffffff","error-container":"#ffdad6","background":"#f7f9fc","on-background":"#191c1e","surface":"#f7f9fc","on-surface":"#191c1e","surface-variant":"#e0e3e6","on-surface-variant":"#594139","outline":"#8d7168","outline-variant":"#e1bfb5","surface-dim":"#d8dadd","surface-container-lowest":"#ffffff","surface-container-low":"#f2f4f7","surface-container":"#eceef1","surface-container-high":"#e6e8eb","surface-container-highest":"#e0e3e6","inverse-surface":"#2d3133","inverse-on-surface":"#eff1f4","inverse-primary":"#ffb59d"},fontFamily:{sans:["Inter","sans-serif"]}}}}
+</script>
+<style>
+  .menu-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+  .slide-up{animation:slideUp .4s ease forwards}
+  .modal-backdrop{background:rgba(0,0,0,.5);backdrop-filter:blur(4px)}
+</style>
+</head>
+<body class="bg-surface-container-low min-h-screen font-sans pb-24">
+<!-- Top Bar -->
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high">
+  <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <a href="index.html" class="p-2 -ml-2 hover:bg-surface-container rounded-full transition">
+        <span class="material-symbols-outlined text-on-surface">arrow_back</span>
+      </a>
+      <h1 id="page-title" class="text-base font-semibold text-on-surface truncate">Menu</h1>
+    </div>
+    <button onclick="openCheckoutModal()" class="relative p-2 flex items-center justify-center hover:bg-surface-container rounded-full transition">
+      <span class="material-symbols-outlined text-on-surface">shopping_cart</span>
+      <span id="cart-badge" class="hidden absolute -top-0.5 -right-0.5 w-5 h-5 bg-primary text-on-primary text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- UMKM Header -->
+<div id="umkm-header" class="max-w-5xl mx-auto px-4 pt-4 mb-4"></div>
+
+<!-- Search Bar -->
+<div class="max-w-5xl mx-auto px-4 mb-6">
+  <div class="relative">
+    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+    <input type="text" id="stall-search" placeholder="Cari nama warung..." 
+      class="w-full pl-12 pr-4 py-3 bg-surface rounded-2xl border border-surface-container-high focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-sm"/>
+  </div>
+</div>
+
+<!-- Stalls & Menus -->
+<main id="stalls-container" class="max-w-5xl mx-auto px-4 space-y-8"></main>
+
+<!-- Floating Cart Bar -->
+<div id="cart-bar" class="hidden fixed bottom-0 left-0 right-0 z-30 p-4 sm:hidden">
+  <div class="max-w-md mx-auto bg-primary text-on-primary rounded-2xl shadow-2xl px-5 py-3.5 flex items-center justify-between cursor-pointer hover:bg-on-primary-container transition"
+       onclick="openCheckoutModal()">
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined">shopping_bag</span>
+      <span id="cart-bar-count" class="text-sm font-semibold">0 item</span>
+    </div>
+    <span id="cart-bar-total" class="text-sm font-bold">Rp 0</span>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div id="checkout-modal" class="hidden fixed inset-0 z-50 modal-backdrop">
+  <div class="absolute inset-x-0 bottom-0 max-h-[90vh] bg-surface rounded-t-3xl shadow-2xl overflow-hidden flex flex-col slide-up sm:relative sm:max-w-lg sm:mx-auto sm:my-8 sm:rounded-2xl sm:max-h-[85vh]">
+    <!-- Modal Header -->
+    <div class="sticky top-0 bg-surface z-10 px-6 py-4 border-b border-surface-container flex items-center justify-between">
+      <h2 class="text-lg font-bold text-on-surface">Keranjang Belanja</h2>
+      <button onclick="closeCheckoutModal()" class="p-1.5 hover:bg-surface-container rounded-full transition">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <!-- Modal Body -->
+    <div id="checkout-body" class="flex-1 overflow-y-auto px-6 py-4 space-y-6"></div>
+    <!-- Modal Footer -->
+    <div class="sticky bottom-0 bg-surface border-t border-surface-container px-6 py-4 space-y-3">
+      <!-- Dining Option -->
+      <div class="flex items-center gap-4">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="dining_option" value="dine_in" checked
+            class="w-4 h-4 text-primary border-outline focus:ring-primary"/>
+          <span class="text-sm font-medium text-on-surface">Makan di Tempat</span>
+        </label>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="dining_option" value="takeaway"
+            class="w-4 h-4 text-primary border-outline focus:ring-primary"/>
+          <span class="text-sm font-medium text-on-surface">Bungkus</span>
+        </label>
+      </div>
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-xs text-on-surface-variant">Total Pembayaran</p>
+          <p id="checkout-total" class="text-xl font-bold text-primary">Rp 0</p>
+        </div>
+        <button id="checkout-btn" onclick="handleCheckout()"
+          class="bg-primary hover:bg-on-primary-container text-on-primary font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">shopping_cart_checkout</span>
+          Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Reviews Modal -->
+<div id="reviews-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4">
+  <div class="bg-surface rounded-t-3xl sm:rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[85vh] flex flex-col transition-transform transform translate-y-full sm:translate-y-0" id="reviews-modal-content">
+    <div class="px-6 py-4 border-b border-surface-container flex items-center justify-between bg-surface sticky top-0 z-10">
+      <h3 class="font-bold text-on-surface text-lg">Ulasan Warung</h3>
+      <button onclick="closeReviewsModal()" class="p-2 -mr-2 hover:bg-surface-container rounded-full transition"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div id="reviews-list" class="p-4 space-y-4 overflow-y-auto flex-1">
+      <!-- Reviews injected here -->
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-xl border-t border-surface-container-high z-20 sm:hidden" id="bottom-nav">
+  <div class="flex items-center justify-around h-16">
+    <a href="index.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">home</span>
+      <span class="text-[10px] font-medium">Beranda</span>
+    </a>
+    <a href="orders.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">receipt_long</span>
+      <span class="text-[10px] font-medium">Pesanan</span>
+    </a>
+    <a href="profile.html" class="flex flex-col items-center gap-0.5 text-on-surface-variant">
+      <span class="material-symbols-outlined text-[24px]">person</span>
+      <span class="text-[10px] font-medium">Profil</span>
+    </a>
+  </div>
+</nav>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/menu.js?v=${Date.now()}"></script>
+</body></html>

@@ -1,0 +1,152 @@
+[
+  {
+    "name": "login pembeli benar",
+    "pass": true,
+    "detail": "status=200"
+  },
+  {
+    "name": "login password salah",
+    "pass": true,
+    "detail": "status=401"
+  },
+  {
+    "name": "GET /auth/me dgn JWT",
+    "pass": true,
+    "detail": "status=200"
+  },
+  {
+    "name": "token tidak valid ditolak",
+    "pass": true,
+    "detail": "status=401"
+  },
+  {
+    "name": "registrasi user baru",
+    "pass": true,
+    "detail": "status=201"
+  },
+  {
+    "name": "registrasi duplikat ditolak",
+    "pass": true,
+    "detail": "status=400"
+  },
+  {
+    "name": "buyer ditolak endpoint seller",
+    "pass": true,
+    "detail": "status=403 (authorize middleware)"
+  },
+  {
+    "name": "tanpa token checkout ditolak",
+    "pass": true,
+    "detail": "status=401"
+  },
+  {
+    "name": "buyer lihat hanya order sendiri",
+    "pass": true,
+    "detail": "jumlah=61"
+  },
+  {
+    "name": "GET /umkm public",
+    "pass": true,
+    "detail": "status=200 data=1"
+  },
+  {
+    "name": "GET stall per UMKM",
+    "pass": true,
+    "detail": "status=200"
+  },
+  {
+    "name": "GET stall detail + menu",
+    "pass": true,
+    "detail": "menu=5"
+  },
+  {
+    "name": "seller GET menu sendiri",
+    "pass": true,
+    "detail": "status=200"
+  },
+  {
+    "name": "seller tambah menu",
+    "pass": true,
+    "detail": "status=201"
+  },
+  {
+    "name": "seller ubah menu",
+    "pass": true,
+    "detail": "status=200"
+  },
+  {
+    "name": "buyer ubah menu seller ditolak",
+    "pass": true,
+    "detail": "status=403"
+  },
+  {
+    "name": "seller hapus menu",
+    "pass": true,
+    "detail": "status=200"
+  },
+  {
+    "name": "hapus menu kedua kali 404",
+    "pass": true,
+    "detail": "status=404"
+  },
+  {
+    "name": "checkout keranjang kosong ditolak",
+    "pass": true,
+    "detail": "status=400"
+  },
+  {
+    "name": "checkout 1 warung",
+    "pass": true,
+    "detail": "status=201 orderId=c1d2914e-566f-4d0a-9714-d43ad561da57"
+  },
+  {
+    "name": "order 1 warung = 1 split",
+    "pass": true,
+    "detail": "splits=1"
+  },
+  {
+    "name": "checkout menu valid tapi stall invalid",
+    "pass": true,
+    "detail": "status=500 (NOTE: cek FK)"
+  },
+  {
+    "name": "socket buyer connect JWT",
+    "pass": true,
+    "detail": "connected id=tjLx6fBQuK1cuSvjAAAF"
+  },
+  {
+    "name": "socket token invalid ditolak",
+    "pass": true,
+    "detail": "Authentication error: Invalid token"
+  },
+  {
+    "name": "socket token invalid ditolak",
+    "pass": true,
+    "detail": "hasil=rejected"
+  },
+  {
+    "name": "checkout multi-warung (split-order)",
+    "pass": true,
+    "detail": "status=201"
+  },
+  {
+    "name": "split-order: 2 warung = 2 split + subtotal benar",
+    "pass": true,
+    "detail": "splits=2 subtotals=15000.00,24000.00"
+  },
+  {
+    "name": "realtime: seller update status -> buyer terima event",
+    "pass": true,
+    "detail": "upd=200 events=[{\"splitId\":\"c2ef2e8e-db98-41b8-a334-ae8186ff6da8\",\"status\":\"preparing\",\"updatedAt\":\"2026-10-28T14:49:29.029Z\"}]"
+  },
+  {
+    "name": "RBAC socket: non-pemilik tidak terima event order",
+    "pass": true,
+    "detail": "events=0"
+  },
+  {
+    "name": "join room arbitrary diterima (unci: hanya menerima event room tsb)",
+    "pass": true,
+    "detail": "room split-palsu tidak akan dapat event valid"
+  }
+]
