@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daftar Warung Baru - KantinKu</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ab3500","on-primary":"#ffffff","primary-container":"#ff6b35","on-primary-container":"#5f1900","secondary":"#24619d","on-secondary":"#ffffff","secondary-container":"#87bcfe","tertiary":"#006d3e","on-tertiary":"#ffffff","tertiary-container":"#00b067","error":"#ba1a1a","on-error":"#ffffff","error-container":"#ffdad6","background":"#f7f9fc","on-background":"#191c1e","surface":"#f7f9fc","on-surface":"#191c1e","surface-variant":"#e0e3e6","on-surface-variant":"#594139","outline":"#8d7168","outline-variant":"#e1bfb5","surface-dim":"#d8dadd","surface-container-lowest":"#ffffff","surface-container-low":"#f2f4f7","surface-container":"#eceef1","surface-container-high":"#e6e8eb","surface-container-highest":"#e0e3e6","inverse-surface":"#2d3133","inverse-on-surface":"#eff1f4","inverse-primary":"#ffb59d"},fontFamily:{sans:["Inter","sans-serif"]}}}}
+</script>
+</head>
+<body class="bg-surface-container-low min-h-screen font-sans">
+<header class="sticky top-0 z-30 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high">
+  <div class="max-w-2xl mx-auto px-4 h-16 flex items-center gap-3">
+    <a href="profile.html" class="p-2 -ml-2 hover:bg-surface-container rounded-full transition">
+      <span class="material-symbols-outlined text-on-surface">arrow_back</span>
+    </a>
+    <h1 class="text-lg font-semibold text-on-surface">Daftar Warung Baru</h1>
+  </div>
+</header>
+<main class="max-w-2xl mx-auto px-4 py-6">
+  <div class="bg-tertiary/5 border border-tertiary/20 rounded-xl p-4 mb-6 flex gap-3">
+    <span class="material-symbols-outlined text-tertiary mt-0.5">info</span>
+    <div class="text-sm text-on-surface">
+      <p class="font-semibold mb-1">Syarat Pendaftaran Warung</p>
+      <p class="text-on-surface-variant">Jika pengajuan disetujui Admin, akun Anda akan otomatis berubah menjadi <strong class="text-tertiary">Penjual (Seller)</strong>.</p>
+    </div>
+  </div>
+  <form id="stall-form" class="space-y-6">
+    <div class="bg-surface rounded-xl border border-surface-container-high p-6 space-y-5">
+      <h2 class="text-base font-semibold text-on-surface flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary">storefront</span>
+        Informasi Warung
+      </h2>
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1.5" for="stall_name">Nama Warung *</label>
+        <input type="text" id="stall_name" required placeholder="Contoh: Warung Makan Bu Sari"
+          class="block w-full px-4 py-2.5 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1.5" for="stall_wa">Nomor WhatsApp Aktif *</label>
+        <input type="tel" id="stall_wa" required placeholder="08xxxxxxxxxx"
+          class="block w-full px-4 py-2.5 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1.5" for="stall_desc">Deskripsi Warung</label>
+        <textarea id="stall_desc" rows="3" placeholder="Deskripsikan warung Anda..."
+          class="block w-full px-4 py-2.5 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition resize-none"></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1.5" for="stall_umkm">Pilih Lokasi UMKM *</label>
+        <select id="stall_umkm" required
+          class="block w-full px-4 py-2.5 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary transition">
+          <option value="">Memuat lokasi...</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" id="stall-submit-btn"
+      class="w-full bg-primary hover:bg-on-primary-container text-on-primary font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2">
+      <span class="material-symbols-outlined text-[20px]">send</span>
+      Ajukan Pendaftaran Warung
+    </button>
+  </form>
+</main>
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/apply.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof initStallForm === 'function') initStallForm();
+  });
+</script>
+</body></html>

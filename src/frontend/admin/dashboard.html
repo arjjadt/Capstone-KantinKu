@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Panel - KantinKu</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#ab3500","on-primary":"#ffffff","primary-container":"#ff6b35","on-primary-container":"#5f1900","secondary":"#24619d","on-secondary":"#ffffff","secondary-container":"#87bcfe","tertiary":"#006d3e","on-tertiary":"#ffffff","tertiary-container":"#00b067","error":"#ba1a1a","on-error":"#ffffff","error-container":"#ffdad6","background":"#f7f9fc","on-background":"#191c1e","surface":"#f7f9fc","on-surface":"#191c1e","surface-variant":"#e0e3e6","on-surface-variant":"#594139","outline":"#8d7168","outline-variant":"#e1bfb5","surface-dim":"#d8dadd","surface-container-lowest":"#ffffff","surface-container-low":"#f2f4f7","surface-container":"#eceef1","surface-container-high":"#e6e8eb","surface-container-highest":"#e0e3e6","inverse-surface":"#2d3133","inverse-on-surface":"#eff1f4","inverse-primary":"#ffb59d"},fontFamily:{sans:["Inter","sans-serif"]}}}}
+</script>
+<style>.admin-tab.active{color:#ab3500;border-color:#ab3500;background:rgba(171,53,0,.05)}</style>
+</head>
+<body class="bg-surface-container-low min-h-screen font-sans">
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="hidden md:flex flex-col w-64 bg-inverse-surface text-inverse-on-surface flex-shrink-0 sticky top-0 h-screen overflow-y-auto">
+    <div class="p-6 border-b border-white/10">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-inverse-primary text-[28px]" style="font-variation-settings:'FILL' 1">admin_panel_settings</span>
+        <span class="text-xl font-bold text-inverse-primary">KantinKu</span>
+      </div>
+      <p class="text-xs text-inverse-on-surface/60 mt-1">Admin Panel</p>
+    </div>
+    <nav class="flex-1 py-4 space-y-1 px-3">
+      <button onclick="switchAdminTab('overview')" data-tab="overview" class="admin-tab active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition hover:bg-white/5"><span class="material-symbols-outlined text-[20px]">dashboard</span>Overview</button>
+      <button onclick="switchAdminTab('umkm-apps')" data-tab="umkm-apps" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition hover:bg-white/5"><span class="material-symbols-outlined text-[20px]">domain_add</span>Pengajuan UMKM</button>
+      <button onclick="switchAdminTab('stall-apps')" data-tab="stall-apps" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition hover:bg-white/5"><span class="material-symbols-outlined text-[20px]">add_business</span>Pengajuan Warung</button>
+      <button onclick="switchAdminTab('users')" data-tab="users" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition hover:bg-white/5"><span class="material-symbols-outlined text-[20px]">group</span>Pengguna</button>
+      <button onclick="switchAdminTab('umkm-mgmt')" data-tab="umkm-mgmt" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition hover:bg-white/5"><span class="material-symbols-outlined text-[20px]">location_city</span>Kelola UMKM</button>
+      <button onclick="switchAdminTab('stall-mgmt')" data-tab="stall-mgmt" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition hover:bg-white/5"><span class="material-symbols-outlined text-[20px]">storefront</span>Kelola Warung</button>
+    </nav>
+    <div class="p-4 border-t border-white/10">
+      <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition"><span class="material-symbols-outlined text-[20px]">logout</span>Keluar</button>
+    </div>
+  </aside>
+
+  <div class="flex-1 flex flex-col">
+    <!-- Mobile Nav -->
+    <header class="md:hidden sticky top-0 z-40 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high">
+      <div class="px-4 h-14 flex items-center justify-between">
+        <span class="text-lg font-bold text-primary">Admin Panel</span>
+        <button onclick="logout()" class="p-2 text-error"><span class="material-symbols-outlined">logout</span></button>
+      </div>
+      <div class="flex overflow-x-auto gap-1 px-3 pb-2">
+        <button onclick="switchAdminTab('overview')" data-tab="overview" class="admin-tab active whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full border border-transparent">Overview</button>
+        <button onclick="switchAdminTab('umkm-apps')" data-tab="umkm-apps" class="admin-tab whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full border border-transparent">UMKM Apps</button>
+        <button onclick="switchAdminTab('stall-apps')" data-tab="stall-apps" class="admin-tab whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full border border-transparent">Stall Apps</button>
+        <button onclick="switchAdminTab('users')" data-tab="users" class="admin-tab whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full border border-transparent">Users</button>
+        <button onclick="switchAdminTab('umkm-mgmt')" data-tab="umkm-mgmt" class="admin-tab whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full border border-transparent">UMKM</button>
+        <button onclick="switchAdminTab('stall-mgmt')" data-tab="stall-mgmt" class="admin-tab whitespace-nowrap px-3 py-1.5 text-xs font-semibold rounded-full border border-transparent">Warung</button>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+      <div id="tab-overview" class="admin-content"><div id="overview-content"></div></div>
+      <div id="tab-umkm-apps" class="admin-content hidden"><h2 class="text-xl font-bold text-on-surface mb-4">Pengajuan UMKM</h2><div id="umkm-apps-list" class="space-y-4"></div></div>
+      <div id="tab-stall-apps" class="admin-content hidden"><h2 class="text-xl font-bold text-on-surface mb-4">Pengajuan Warung</h2><div id="stall-apps-list" class="space-y-4"></div></div>
+      <div id="tab-users" class="admin-content hidden"><h2 class="text-xl font-bold text-on-surface mb-4">Manajemen Pengguna</h2><div id="users-list"></div></div>
+      <div id="tab-umkm-mgmt" class="admin-content hidden"><h2 class="text-xl font-bold text-on-surface mb-4">Kelola UMKM</h2><div id="umkm-mgmt-list" class="space-y-3"></div></div>
+      <div id="tab-stall-mgmt" class="admin-content hidden"><h2 class="text-xl font-bold text-on-surface mb-4">Kelola Warung</h2><div id="stall-mgmt-list" class="space-y-3"></div></div>
+    </main>
+  </div>
+</div>
+
+<!-- Review Modal -->
+<div id="review-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
+    <div class="px-6 py-4 border-b border-surface-container flex items-center justify-between">
+      <h3 id="review-modal-title" class="font-bold text-on-surface">Review Pengajuan</h3>
+      <button onclick="closeReviewModal()" class="p-1 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="px-6 py-5 space-y-4">
+      <input type="hidden" id="review-id"/>
+      <input type="hidden" id="review-type"/>
+      <div id="review-detail" class="text-sm text-on-surface space-y-2"></div>
+      <textarea id="review-notes" rows="3" placeholder="Catatan admin (opsional)..." class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary resize-none"></textarea>
+      <div class="flex gap-3">
+        <button onclick="handleReview('approved')" class="flex-1 bg-tertiary text-on-tertiary font-semibold py-2.5 rounded-xl hover:bg-on-tertiary-container transition">Approve</button>
+        <button onclick="handleReview('rejected')" class="flex-1 bg-error text-on-error font-semibold py-2.5 rounded-xl hover:bg-on-error-container transition">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit UMKM Modal -->
+<div id="edit-umkm-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
+    <div class="px-6 py-4 border-b border-surface-container flex items-center justify-between sticky top-0 bg-surface z-10">
+      <h3 class="font-bold text-on-surface">Edit UMKM</h3>
+      <button onclick="closeEditUmkmModal()" class="p-1 hover:bg-surface-container rounded-full"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <form id="edit-umkm-form" onsubmit="submitEditUmkm(event)" class="px-6 py-5 space-y-4">
+      <input type="hidden" id="edit-umkm-id"/>
+      <div>
+        <label class="block text-xs font-medium text-on-surface mb-1">Nama UMKM *</label>
+        <input id="edit-umkm-name" type="text" required class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary"/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-on-surface mb-1">Deskripsi</label>
+        <textarea id="edit-umkm-desc" rows="2" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary resize-none"></textarea>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-on-surface mb-1">Kota/Wilayah *</label>
+        <input id="edit-umkm-city" type="text" required class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary"/>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-on-surface mb-1">Alamat Lengkap</label>
+        <textarea id="edit-umkm-addr" rows="2" class="w-full px-3 py-2 border border-surface-container-highest rounded-lg text-sm bg-surface focus:ring-2 focus:ring-primary resize-none"></textarea>
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-on-surface mb-1">Foto/Banner Baru</label>
+        <input id="edit-umkm-photo" type="file" accept="image/*" class="w-full text-sm file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary file:font-medium file:cursor-pointer"/>
+      </div>
+      <button type="submit" id="edit-umkm-save-btn" class="w-full bg-primary text-on-primary font-semibold py-2.5 rounded-xl hover:bg-on-primary-container transition">Simpan</button>
+    </form>
+  </div>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/admin.js"></script>
+</body></html>
