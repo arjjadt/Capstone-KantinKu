@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Secrets
+.env
+.env.*
+
+# Uploaded Files
+uploads/*
+!uploads/.gitkeep
+!uploads/avatars/
+!uploads/avatars/.gitkeep
+!uploads/menus/
+!uploads/menus/.gitkeep
+!uploads/stalls/
+!uploads/stalls/.gitkeep
+!uploads/umkm/
+!uploads/umkm/.gitkeep
+
+# Archives
+*.rar
+*.zip
+*.7z
+*.tar.gz
+
+# Logs
+*.log
